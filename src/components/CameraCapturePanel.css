@@ -1,0 +1,16 @@
+/* Development only (npm run dev with developmentTools.cameraCapture). The dashed
+   border marks it as a tool that never reaches a production build. */
+.camera-capture-dev { position: absolute; z-index: 4; left: calc(var(--panel-width) + var(--map-gap)); top: calc(var(--header-height) + var(--map-gap) + 80px); width: min(300px, calc(100vw - var(--panel-width) - 180px)); max-height: calc(100dvh - var(--header-height) - var(--bar-height) - 140px); overflow-y: auto; padding: 12px; border: 1px dashed var(--color-accent-600); border-radius: var(--radius-md); background: var(--color-neutral-100); color: var(--color-text); font-size: 12px; box-shadow: var(--shadow-md); }
+.camera-capture-dev button, .camera-capture-dev select { width: 100%; min-height: 38px; padding: 6px 10px; border: 1px solid var(--color-divider); border-radius: var(--radius-sm); background: var(--color-neutral-200); color: inherit; font-size: 12px; }
+.camera-capture-dev button:hover:not(:disabled) { background: var(--color-neutral-300); }
+.camera-capture-dev button:disabled, .camera-capture-dev select:disabled { opacity: .55; }
+.camera-capture-toggle { font-weight: 700; }
+.camera-capture-actions { display: grid; gap: 8px; margin-top: 8px; }
+.camera-capture-scene { display: grid; gap: 4px; padding: 6px; border: 1px solid var(--color-divider); border-radius: var(--radius-sm); }
+.camera-capture-scene label { font-size: 11px; }
+.camera-capture-ignore { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.camera-capture-dev p { margin: 8px 0 0; line-height: 1.4; }
+.camera-capture-dev textarea { width: 100%; min-height: 90px; margin-top: 8px; resize: vertical; border: 1px solid var(--color-divider); border-radius: var(--radius-sm); background: #fff; font: 11px/1.5 monospace; }
+@media (max-width: 760px) {
+  .camera-capture-dev { left: var(--map-gap); top: calc(var(--header-height) + var(--map-gap) + 52px); width: min(280px, calc(100vw - 72px)); }
+}

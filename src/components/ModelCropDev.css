@@ -1,0 +1,17 @@
+/* Development only (developmentTools.cropAuthoring / modelAlignment). */
+.model-crop-dev { position: absolute; z-index: 4; left: calc(var(--panel-width) + var(--map-gap)); bottom: calc(var(--bar-height) + var(--credits-clearance) + 8px); width: min(340px, calc(100vw - var(--panel-width) - 32px)); max-height: calc(100dvh - var(--header-height) - var(--bar-height) - 120px); overflow: auto; padding: 12px; border: 1px dashed var(--color-accent-600); border-radius: var(--radius-md); background: var(--color-neutral-100); color: var(--color-text); box-shadow: var(--shadow-md); }
+.model-crop-dev-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.model-crop-dev button { width: 100%; min-height: 40px; padding: 6px 8px; border: 1px solid var(--color-divider); border-radius: var(--radius-sm); background: var(--color-neutral-200); color: inherit; cursor: pointer; }
+.model-crop-dev button:hover:not(:disabled) { background: var(--color-neutral-300); }
+.model-crop-dev button:disabled { opacity: .5; cursor: default; }
+.model-crop-dev small, .model-crop-dev p { display: block; margin: 8px 0 0; font-size: 11px; line-height: 1.4; }
+.model-crop-dev textarea { width: 100%; min-height: 155px; margin-top: 8px; resize: vertical; border: 1px solid var(--color-divider); border-radius: var(--radius-sm); background: #fff; font: 11px/1.5 monospace; }
+@media (max-width: 760px) {
+  .model-crop-dev { left: var(--map-gap); width: min(340px, calc(100vw - 2 * var(--map-gap))); }
+  .model-crop-dev button { min-height: 44px; }
+  .app-shell:has(.layer-panel.is-open) .model-crop-dev { visibility: hidden; }
+}
+
+.model-alignment-dev { position: absolute; z-index: 4; right: calc(var(--tools-clearance) + 8px); top: calc(var(--header-height) + var(--map-gap)); width: 230px; padding: 12px; border: 1px dashed var(--color-accent-600); border-radius: var(--radius-md); background: var(--color-neutral-100); color: var(--color-text); box-shadow: var(--shadow-md); }
+.model-alignment-dev input { width: 100%; margin: 8px 0; accent-color: var(--color-accent-2-600); }
+.model-alignment-dev button { width: 100%; min-height: 40px; border: 1px solid var(--color-divider); border-radius: var(--radius-sm); background: var(--color-neutral-200); }

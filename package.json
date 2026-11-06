@@ -1,0 +1,31 @@
+{
+  "name": "campinas-2-webgis",
+  "private": true,
+  "version": "3.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "check": "node scripts/check-projects.cjs && node scripts/check-workspace.cjs && node scripts/check-temporal.cjs && node scripts/check-ui.cjs && node scripts/check-raster-lifecycle.cjs && node scripts/check-measurements.cjs && node scripts/check-template-v2.cjs && node scripts/check-raster-xml.cjs && node scripts/check-navigation.cjs && node scripts/check-prepare-geojson.cjs && node scripts/check-embedded-pages.cjs",
+    "new-project": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/new-project.ps1",
+    "raster-from-xml": "node scripts/raster-from-xml.cjs",
+    "capture-camera": "node scripts/capture-camera.cjs",
+    "prepare-geojson": "node scripts/prepare-geojson.cjs"
+  },
+  "dependencies": {
+    "cesium": "^1.147.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vite-plugin-cesium": "^1.2.23"
+  }
+}

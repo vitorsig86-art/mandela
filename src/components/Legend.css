@@ -1,0 +1,72 @@
+/* Legends use the same cream card as the panel. The stack sits in the lower-right
+   corner, below the tools column and clear of the timeline. */
+.raster-legend {
+  --legend-bar-height: clamp(64px, calc(100dvh - var(--header-height) - var(--bar-height) - 620px), 180px);
+  position: relative;
+  flex-shrink: 0;
+  width: 120px;
+  padding: 10px 12px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-100);
+  color: var(--color-text);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+}
+
+.raster-legend-title { margin: 0 0 8px; font-size: 13px; font-weight: 700; line-height: 1.3; }
+
+.raster-legend.raster-legend-image { width: auto; max-width: 160px; padding: 8px; }
+.raster-legend-image img { display: block; max-width: 100%; height: auto; border-radius: var(--radius-sm); }
+
+.raster-legend.raster-legend-missing { width: 200px; }
+.raster-legend-missing p { margin: 0; color: var(--color-neutral-700); font-size: 12px; line-height: 1.4; }
+
+.raster-legend-scale { position: relative; height: var(--legend-bar-height); }
+.raster-legend-gradient { width: 14px; height: 100%; border-radius: 999px; }
+.raster-legend-tick { position: absolute; left: 18px; display: flex; align-items: center; gap: 4px; transform: translateY(-50%); font-size: 12px; line-height: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.raster-legend-mark { flex-shrink: 0; width: 5px; height: 1px; background: var(--color-neutral-700); }
+
+.raster-legend-stack {
+  position: absolute;
+  z-index: 1;
+  right: max(var(--map-gap), env(safe-area-inset-right));
+  bottom: calc(var(--bar-height) + var(--credits-clearance));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-height: max(48px, calc(100dvh - var(--header-height) - var(--bar-height) - var(--credits-clearance) - 470px));
+  /* Only the cards scroll; the "Legenda · N" button always stays visible. */
+  overflow: visible;
+}
+.raster-legend-stack-items::-webkit-scrollbar { display: none; }
+.raster-legend-stack-items { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: 4px; margin: -4px; }
+.raster-legend-stack-items[hidden] { display: none; }
+
+.legend-toggle { display: inline-flex; flex-shrink: 0; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border: 0; border-radius: 999px; background: var(--color-neutral-100); box-shadow: var(--shadow-sm); font-size: 12px; font-weight: 600; touch-action: manipulation; }
+.legend-toggle:hover { background: var(--color-neutral-200); }
+.legend-toggle .icon { transition: transform 150ms ease; }
+.legend-toggle[aria-expanded="false"] .icon { transform: rotate(180deg); }
+
+/* When the map is too narrow for the timeline and the legend side by side, the legend
+   moves to the free left edge, between the period badge and the timeline. */
+@media (min-width: 761px) and (max-width: 1279px) {
+  .raster-legend-stack { right: auto; left: calc(var(--panel-width) + var(--map-gap)); bottom: calc(var(--credits-clearance) + 128px); align-items: flex-start; max-height: max(48px, calc(100dvh - var(--header-height) - var(--credits-clearance) - 260px)); }
+  .raster-legend-stack-items { align-items: flex-start; }
+  .raster-legend { --legend-bar-height: clamp(64px, calc(100dvh - var(--header-height) - 420px), 180px); }
+}
+
+/* Mobile: the stack opens from "Legenda" in the bottom bar; each legend still expands on tap. */
+@media (max-width: 760px) {
+  .raster-legend-stack { right: max(10px, env(safe-area-inset-right)); bottom: calc(var(--bar-height) + var(--credits-clearance)); max-height: calc(100dvh - var(--header-height) - var(--bar-height) - 210px); }
+  .raster-legend { --legend-bar-height: clamp(64px, calc(100dvh - var(--header-height) - var(--bar-height) - 320px), 180px); --mobile-legend-width: min(30vw, 120px); width: var(--mobile-legend-width); pointer-events: auto; cursor: zoom-in; touch-action: manipulation; transition: width 180ms ease; }
+  .raster-legend.raster-legend-image { width: var(--mobile-legend-width); max-width: none; }
+  .raster-legend.raster-legend-missing { width: min(60vw, 220px); pointer-events: none; cursor: default; }
+  .raster-legend-image img { width: 100%; max-height: calc(100dvh - var(--header-height) - var(--bar-height) - 260px); height: auto; object-fit: contain; object-position: right bottom; }
+  .raster-legend.is-expanded { --mobile-legend-width: min(45vw, 168px); cursor: zoom-out; }
+  .raster-legend.is-expanded .raster-legend-title { font-size: 15px; }
+  .raster-legend.is-expanded .raster-legend-tick { font-size: 13px; }
+  .raster-legend:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) { .raster-legend, .legend-toggle .icon { transition: none; } }

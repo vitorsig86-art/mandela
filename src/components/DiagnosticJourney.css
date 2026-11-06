@@ -1,0 +1,43 @@
+/* Guided diagnostic card over the map, left side, clear of the tools column and the timeline. */
+.diagnostic-journey {
+  position: absolute;
+  left: calc(var(--panel-width) + var(--map-gap));
+  top: calc(var(--header-height) + var(--map-gap));
+  z-index: 1;
+  width: min(340px, calc(100vw - var(--panel-width) - 2 * var(--map-gap) - var(--tools-clearance)));
+  max-height: min(460px, calc(100dvh - var(--header-height) - var(--bar-height) - 200px));
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-100);
+  color: var(--color-text);
+  box-shadow: var(--shadow-md);
+}
+/* The diagnostic card takes the period badge's corner. */
+.app-shell:has(.diagnostic-journey) .period-badge { display: none; }
+
+.diagnostic-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 18px 12px; }
+.diagnostic-content:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -3px; border-radius: var(--radius-md); }
+.diagnostic-progress { margin: 0 0 6px; color: var(--color-neutral-700); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.diagnostic-content h2 { margin: 0; font-family: var(--font-heading); font-size: 20px; font-weight: 400; line-height: 1.2; color: var(--color-accent-700); }
+.diagnostic-text { margin: 10px 0 0; font-size: 13px; line-height: 1.55; }
+.diagnostic-facts { margin: 12px 0 0; display: grid; gap: 8px; }
+.diagnostic-facts dt { color: var(--color-neutral-700); font-size: 12px; }
+.diagnostic-facts dd { margin: 2px 0 0; font-size: 13px; font-weight: 600; line-height: 1.4; }
+.diagnostic-references { margin-top: 12px; color: var(--color-neutral-700); font-size: 12px; }
+.diagnostic-references p { margin: 0 0 6px; font-weight: 600; }
+.diagnostic-references ul { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; padding-left: 16px; }
+.diagnostic-actions { display: flex; justify-content: space-between; gap: 8px; flex-shrink: 0; padding: 10px 18px 14px; border-top: 1px solid var(--color-divider); }
+.diagnostic-actions button { min-height: 36px; padding: 0 14px; border: 1px solid var(--color-divider); border-radius: 999px; background: transparent; font-size: 13px; font-weight: 600; touch-action: manipulation; }
+.diagnostic-actions button:hover:not(:disabled) { background: var(--color-neutral-200); }
+.diagnostic-actions .diagnostic-next { border-color: var(--color-accent-700); background: var(--color-accent-700); color: var(--color-neutral-100); }
+.diagnostic-actions .diagnostic-next:hover { background: var(--color-accent-800); }
+
+@media (max-width: 760px) {
+  .diagnostic-journey { left: var(--map-gap); right: calc(var(--map-gap) + 52px); width: auto; max-height: 40dvh; }
+  .diagnostic-content { padding: 12px 14px; }
+  .diagnostic-content h2 { font-size: 17px; }
+  .diagnostic-actions { padding: 8px 12px; }
+  .diagnostic-actions button { min-height: 44px; }
+  .app-shell:has(.layer-panel.is-open) .diagnostic-journey { visibility: hidden; }
+}

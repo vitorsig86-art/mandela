@@ -1,0 +1,9 @@
+/* "Explorar | Diagnóstico" sits in the header actions, as a segmented control. */
+.mode-switcher { display: flex; flex-shrink: 0; padding: 3px; border: 1px solid var(--color-divider); border-radius: 999px; background: var(--color-neutral-100); }
+.mode-switcher button { min-height: 32px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: var(--color-neutral-700); font-size: 13px; font-weight: 600; touch-action: manipulation; }
+.mode-switcher button:hover:not([aria-pressed="true"]) { background: var(--color-neutral-200); }
+.mode-switcher button[aria-pressed="true"] { background: var(--color-accent-100); color: var(--color-accent-700); }
+
+@media (max-width: 760px) {
+  .mode-switcher button { min-height: 38px; padding: 0 10px; font-size: 12px; }
+}

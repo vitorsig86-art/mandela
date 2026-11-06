@@ -1,0 +1,27 @@
+/* Measurement group in the tools column; the readout opens anchored to the left of the column. */
+.measurement-controls { position: relative; width: 44px; font-size: 13px; }
+.measurement-toolbar { display: flex; flex-direction: column; width: 44px; padding: 4px 0; border-radius: 999px; background: var(--color-neutral-100); box-shadow: var(--shadow-md); }
+.measurement-toolbar button { position: relative; display: grid; place-items: center; width: 44px; height: 40px; padding: 0; border: 0; background: transparent; color: var(--color-text); touch-action: manipulation; }
+.measurement-toolbar button:hover:not(:disabled), .measurement-actions button:hover:not(:disabled) { background: var(--color-neutral-200); }
+.measurement-toolbar button[aria-pressed="true"] { background: var(--color-accent-100); color: var(--color-accent-700); }
+.measurement-controls button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+.measurement-readout { position: absolute; top: 0; right: calc(100% + 8px); width: 260px; max-height: max(80px, calc(100dvh - var(--header-height) - var(--bar-height) - 260px)); overflow-y: auto; padding: 14px 16px; border-radius: var(--radius-md); background: var(--color-neutral-100); box-shadow: var(--shadow-md); line-height: 1.5; overflow-wrap: anywhere; }
+.measurement-readout > strong { display: block; font-size: 14px; }
+.measurement-readout p { margin: 4px 0; }
+.measurement-help { color: var(--color-neutral-700); font-size: 12px; }
+.measurement-readout output { display: block; margin: 6px 0; white-space: pre-line; color: var(--color-accent-800); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.measurement-message:empty { display: none; }
+.measurement-count { color: var(--color-neutral-700); font-size: 12px; font-variant-numeric: tabular-nums; }
+.measurement-notes { margin-top: 6px; }
+.measurement-notes summary { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; color: var(--color-accent-700); font-size: 12px; font-weight: 600; cursor: pointer; list-style: none; }
+.measurement-notes summary::-webkit-details-marker { display: none; }
+.measurement-notes small { display: block; color: var(--color-neutral-700); font-size: 12px; line-height: 1.45; }
+.measurement-actions { display: flex; gap: 8px; margin-top: 10px; }
+.measurement-actions button { flex: 1; min-height: 36px; padding: 0 12px; border: 1px solid var(--color-divider); border-radius: 999px; background: transparent; font-size: 13px; font-weight: 600; }
+
+/* Mobile: the readout becomes a card under the header, clear of the tools column. */
+@media (max-width: 760px) {
+  .measurement-readout { position: fixed; top: calc(var(--header-height) + var(--map-gap)); left: var(--map-gap); right: calc(var(--map-gap) + 52px); width: auto; max-height: calc(100dvh - var(--header-height) - var(--bar-height) - 40px); padding: 10px 14px; border-radius: 22px; z-index: 2; }
+  .measurement-actions button { min-height: 44px; }
+}

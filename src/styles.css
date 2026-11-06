@@ -1,0 +1,130 @@
+/* Layout of the app shell. Colors, fonts and shadows come from theme.css. */
+:root {
+  --header-height: 52px;
+  --panel-width: 280px;
+  --bar-height: 0px;
+  --map-gap: 16px;
+  --credits-clearance: 36px;
+  /* Room kept free on the right of the map for the tools column. */
+  --tools-clearance: 76px;
+}
+* { box-sizing: border-box; }
+html, body, #root, .app-shell { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+button, select, input { font: inherit; color: inherit; }
+button, select, label.layer-card { cursor: pointer; }
+button:disabled { cursor: default; opacity: 0.45; }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.mobile-only { display: none; }
+
+.app-shell[data-panel="collapsed"] { --panel-width: 0px; }
+.map-container { position: absolute; inset: var(--header-height) 0 var(--bar-height) var(--panel-width); }
+
+/* Fixed zones over the map: period top-left, tools top-right, time at the base,
+   legend bottom-right and Cesium credits bottom-left. */
+.map-tools { position: absolute; z-index: 1; top: calc(var(--header-height) + var(--map-gap)); right: max(var(--map-gap), env(safe-area-inset-right)); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* GPS alerts render inside the tools column but belong to the map's alert zone. */
+.map-tools .map-alert { position: fixed; }
+
+/* Header: brand and project only; the rest of the height belongs to the map. */
+.app-header { position: absolute; top: 0; left: 0; right: 0; height: var(--header-height); display: flex; align-items: center; gap: 12px; padding: 0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left)); background: var(--color-neutral-100); border-bottom: 1px solid var(--color-divider); z-index: 3; }
+.brand { display: flex; flex-shrink: 0; align-items: center; gap: 10px; min-width: 0; color: inherit; text-decoration: none; }
+.brand img { width: 28px; height: 28px; object-fit: contain; }
+.brand strong { font-size: 14px; font-weight: 700; }
+.brand-project { min-width: 0; overflow: hidden; color: var(--color-neutral-700); font-size: 14px; white-space: nowrap; text-overflow: ellipsis; }
+.header-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.header-button { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: var(--color-accent-700); font-size: 14px; font-weight: 600; white-space: nowrap; touch-action: manipulation; }
+.header-button:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.header-button[aria-pressed="true"] { background: var(--color-accent-100); }
+
+.layer-panel { position: absolute; inset: var(--header-height) auto 0 0; width: var(--panel-width); display: flex; flex-direction: column; overflow-y: auto; background: var(--color-neutral-100); border-right: 1px solid var(--color-divider); z-index: 2; }
+.app-shell[data-panel="collapsed"] .layer-panel { display: none; }
+
+/* Alerts use the same surface as every other card; tone comes from the dot. */
+.map-alert { position: absolute; left: calc(var(--panel-width) + var(--map-gap)); right: auto; top: calc(var(--header-height) + 96px); max-width: min(440px, calc(100% - var(--panel-width) - 120px)); display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-radius: var(--radius-md); background: var(--color-neutral-100); color: var(--color-text); box-shadow: var(--shadow-md); font-size: 13px; line-height: 1.5; z-index: 1; }
+.map-alert::before { content: ""; flex-shrink: 0; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: var(--color-accent); }
+.map-alert[role="status"]::before { background: var(--color-accent-2-600); }
+
+/* Model navigation hint, shown on the map the first time a model is enabled. */
+.map-hint { position: absolute; left: calc(var(--panel-width) + (100% - var(--panel-width)) / 2); top: calc(var(--header-height) + var(--map-gap)); transform: translateX(-50%); display: flex; align-items: center; gap: 10px; max-width: min(520px, calc(100% - var(--panel-width) - 160px)); padding: 8px 8px 8px 16px; border-radius: 999px; background: var(--color-neutral-100); box-shadow: var(--shadow-md); font-size: 13px; z-index: 1; }
+.map-hint p { margin: 0; }
+.map-hint button { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: var(--color-neutral-200); }
+
+/* Sobre os dados */
+.about-dialog { width: min(560px, calc(100vw - 32px)); max-height: min(720px, calc(100dvh - 48px)); padding: 0; border: 0; border-radius: var(--radius-lg); background: var(--color-neutral-100); color: var(--color-text); box-shadow: var(--shadow-lg); }
+.about-dialog::backdrop { background: color-mix(in srgb, var(--color-neutral-900) 45%, transparent); }
+.about-dialog-body { padding: 24px 26px 26px; overflow-y: auto; max-height: inherit; }
+.about-dialog header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.about-dialog h2 { margin: 0; font-family: var(--font-heading); font-weight: 400; font-size: 26px; line-height: 1.15; }
+.about-dialog h3 { margin: 20px 0 6px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-neutral-700); }
+.about-dialog p, .about-dialog li { margin: 0 0 6px; font-size: 14px; line-height: 1.55; }
+.about-dialog ul { margin: 0; padding-left: 18px; }
+.about-dialog .about-close { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; padding: 0; border: 0; border-radius: 50%; background: var(--color-neutral-200); }
+
+/* Cesium credits: native content and dialog kept (Cesium ion terms), styled to stay discreet. */
+.map-container .cesium-widget-credits { font-family: var(--font-body); font-size: 10px; color: color-mix(in srgb, #fff 88%, transparent); text-shadow: 0 1px 2px color-mix(in srgb, #000 70%, transparent); }
+.map-container .cesium-credit-logoContainer img { max-height: 17px; width: auto; opacity: 0.6; }
+.map-container .cesium-credit-textContainer, .map-container .cesium-credit-textContainer a { color: inherit; }
+.map-container .cesium-credit-expand-link { font-size: 10px; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.map-container .cesium-credit-expand-link:hover { color: #fff; }
+
+/* Mobile bottom bar (hidden on desktop). */
+.mobile-bar { display: none; }
+.sheet-backdrop { display: none; }
+
+@media (max-width: 760px) {
+  :root { --panel-width: 0px; --bar-height: calc(68px + env(safe-area-inset-bottom)); --map-gap: 10px; --credits-clearance: 34px; --tools-clearance: 64px; --timeline-mobile-gap: 8px; --timeline-mobile-height: 114px; }
+  .app-shell[data-panel="collapsed"] { --panel-width: 0px; }
+  .mobile-only { display: inline; }
+  .desktop-only { display: none; }
+  .app-header { gap: 8px; padding: 0 max(8px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left)); }
+  .brand strong.brand-company { display: none; }
+  .brand img { width: 26px; height: 26px; }
+  .header-button span, .header-panel-toggle { display: none; }
+  .header-button { min-width: 44px; min-height: 44px; justify-content: center; padding: 0; }
+
+  /* Bottom bar: "Camadas" opens the sheet; Tempo, Medir and Legenda choose the map overlay. */
+  .mobile-bar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--bar-height); display: flex; padding: 4px max(6px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left)); background: var(--color-neutral-100); border-top: 1px solid var(--color-divider); z-index: 4; }
+  .mobile-bar button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-width: 0; padding: 0; border: 0; background: transparent; font-size: 12px; touch-action: manipulation; }
+  .mobile-bar button > span:first-child { display: grid; place-items: center; padding: 3px 14px; border-radius: 999px; }
+  .mobile-bar button[aria-pressed="true"] { color: var(--color-accent-700); font-weight: 700; }
+  .mobile-bar button[aria-pressed="true"] > span:first-child { background: var(--color-accent-100); }
+  .mobile-bar button:focus-visible { outline-offset: -2px; }
+
+  /* Bottom sheet: medium shows layers over ~55% of the screen; the handle switches to high. */
+  .layer-panel, .app-shell[data-panel="collapsed"] .layer-panel { display: flex; inset: auto 0 var(--bar-height) 0; width: auto; height: min(55dvh, calc(100dvh - var(--header-height) - var(--bar-height) - 24px)); border: 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; box-shadow: var(--shadow-lg); transform: translateY(calc(100% + var(--bar-height))); visibility: hidden; transition: transform 200ms ease, height 200ms ease, visibility 200ms; z-index: 3; }
+  .layer-panel.is-open { transform: translateY(0); visibility: visible; }
+  .layer-panel.is-high { height: calc(100dvh - var(--header-height) - var(--bar-height) - 16px); }
+  .sheet-backdrop { display: block; position: absolute; inset: var(--header-height) 0 var(--bar-height); z-index: 2; padding: 0; border: 0; background: transparent; touch-action: manipulation; }
+
+  /* One overlay per bar tab, so the map is never buried under every tool at once.
+     With no tab chosen (projects without campaigns start on "Camadas") none shows. */
+  .app-shell:not([data-mobile-view="time"]) .temporal-timeline,
+  .app-shell:not([data-mobile-view="measure"]) .measurement-controls,
+  .app-shell:not([data-mobile-view="legend"]) .raster-legend-stack { display: none; }
+  .app-shell:has(.layer-panel.is-open) .temporal-timeline,
+  .app-shell:has(.layer-panel.is-open) .raster-legend-stack { visibility: hidden; }
+
+  .map-alert { left: var(--map-gap); right: var(--map-gap); top: calc(var(--header-height) + 64px); max-width: none; }
+  .map-hint { left: 50%; top: auto; bottom: calc(var(--bar-height) + 150px); max-width: calc(100% - 20px); border-radius: var(--radius-md); }
+
+  /* Keep Cesium's native credit content and dialog; compact only its layout.
+     Cesium's Viewer.resize() writes inline left/bottom on .cesium-viewer-bottom (5px/3px),
+     so the row is shifted with transform: aligned with the timeline card and, on the
+     time tab, lifted above it. */
+  .map-container .cesium-viewer-bottom { width: max-content; max-width: calc(100% - 16px); padding: 0; transform: translateX(3px); }
+  .app-shell[data-mobile-view="time"]:not(:has(.layer-panel.is-open)) .map-container .cesium-viewer-bottom { transform: translate(3px, calc(-1 * (var(--timeline-mobile-gap) + var(--timeline-mobile-height)))); }
+  .map-container .cesium-widget-credits { display: flex; flex-wrap: wrap; align-items: center; column-gap: 4px; row-gap: 0; line-height: 12px; padding: 0; }
+  .map-container .cesium-credit-logoContainer { flex-shrink: 0; }
+  .map-container .cesium-credit-logoContainer a { display: inline-flex; align-items: center; min-height: 28px; }
+  .map-container .cesium-credit-logoContainer img { max-height: 12px; }
+  .map-container .cesium-credit-textContainer { min-width: 0; overflow-wrap: anywhere; }
+  .map-container .cesium-credit-textContainer a { display: inline-block; min-height: 24px; max-width: 100%; line-height: 24px; }
+  .map-container .cesium-credit-textContainer .cesium-credit-wrapper:first-of-type { padding-left: 0; }
+  .map-container .cesium-credit-delimiter { padding: 0 2px; }
+  .map-container .cesium-credit-expand-link { flex-shrink: 0; min-height: 28px; padding: 0 3px; line-height: 28px; white-space: nowrap; touch-action: manipulation; }
+  .map-container .cesium-credit-lightbox-overlay { position: fixed; top: var(--header-height); height: calc(100% - var(--header-height)); z-index: 5; }
+  .map-container .cesium-credit-lightbox-mobile { overflow-y: auto; overscroll-behavior: contain; }
+  .map-container .cesium-credit-lightbox-close { min-width: 44px; min-height: 44px; line-height: 44px; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { .layer-panel { transition: none; } }

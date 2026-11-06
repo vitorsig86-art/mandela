@@ -1,0 +1,22 @@
+.period-badge { position: absolute; z-index: 1; left: calc(var(--panel-width) + var(--map-gap)); top: calc(var(--header-height) + var(--map-gap)); display: flex; align-items: center; gap: 14px; max-width: min(360px, calc(100% - var(--panel-width) - 120px)); padding: 12px 18px 12px 16px; border-radius: 20px; background: var(--color-neutral-100); box-shadow: var(--shadow-md); pointer-events: none; }
+.period-badge-year { flex-shrink: 0; font-family: var(--font-heading); font-size: 30px; line-height: 1; color: var(--color-accent-700); }
+.period-badge[data-tone="empty"] .period-badge-year { color: var(--color-neutral-500); }
+.period-badge-copy { display: flex; flex-direction: column; min-width: 0; }
+.period-badge-copy strong { font-size: 13px; font-weight: 700; line-height: 1.35; }
+.period-badge-detail { display: flex; align-items: center; gap: 6px; color: var(--color-neutral-700); font-size: 12px; line-height: 1.35; }
+.period-badge-detail::before { content: ""; flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent-2-600); }
+.period-badge[data-tone="loading"] .period-badge-detail::before { background: var(--color-accent); animation: period-loading 0.9s ease-in-out infinite alternate; }
+.period-badge[data-tone="error"] .period-badge-detail::before { background: var(--color-accent); }
+.period-badge[data-tone="empty"] .period-badge-detail::before { background: var(--color-neutral-400); }
+
+@keyframes period-loading { from { opacity: 0.35; } to { opacity: 1; } }
+
+@media (max-width: 760px) {
+  .period-badge { gap: 10px; max-width: calc(100% - 84px); padding: 8px 14px; border-radius: 18px; }
+  .period-badge-year { font-size: 22px; }
+  .period-badge-copy strong { font-size: 13px; font-weight: 600; }
+  .period-badge-detail { display: none; }
+  .period-badge[data-tone="loading"] .period-badge-copy strong::after { content: " · carregando"; color: var(--color-accent-700); font-weight: 400; }
+}
+
+@media (prefers-reduced-motion: reduce) { .period-badge[data-tone="loading"] .period-badge-detail::before { animation: none; } }
