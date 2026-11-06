@@ -45,9 +45,23 @@ const modelo: ProjectLayerConfig = {
   id: "modelo", name: "Modelo 3D", description: "", kind: "3d-tiles", defaultVisible: false,
   source: {
     format: "3d-tiles", source: "ion", assetId: 6130668, tokenEnv: "VITE_CESIUM_ION_TOKEN",
-    // Provisório: a conferir com modelAlignment. Registre aqui a referência de
-    // altura usada no upload do ion (elipsoidal, ortométrica, ajuste no ion).
+    // Recorte desenhado com cropAuthoring.
+    clipping: {
+      enabled: true,
+      inverse: true,
+      positions: [
+        [-47.1312274, -22.9837204],
+        [-47.1298383, -22.9868115],
+        [-47.1286680, -22.9888048],
+        [-47.1273744, -22.9885586],
+        [-47.1262175, -22.9883483],
+        [-47.1215179, -22.9865162],
+        [-47.1233174, -22.9816928],
+      ],
+    },
+    // 0: modelo assenta no World Terrain sem offset; referencial vertical do asset a confirmar no ion.
     heightOffsetMeters: 0,
+    terrainCutout: false,
   },
 };
 
@@ -65,6 +79,6 @@ export const project: ProjectConfig = {
   layers: [basemap, orto, mds, mdt, declividade, aspecto, modelo],
   scenes: [],
   diagnostic: { steps: [] },
-  // Ferramentas só aparecem em npm run dev; desligue todas ao finalizar.
-  developmentTools: { modelAlignment: true, cropAuthoring: true, cameraCapture: true },
+  // Ferramentas de desenvolvimento desligadas: o dev fica igual ao site publicado.
+  developmentTools: { modelAlignment: false, cropAuthoring: false, cameraCapture: false },
 };
