@@ -39,6 +39,18 @@ const mdt = derivado("mdt", "Modelo Digital de Terreno", "dtm", "mdt", relevoBou
 const declividade = derivado("declividade", "Declividade", "slope", "decli", relevoBounds, 8, 17);
 const aspecto = derivado("aspecto", "Orientação de Vertentes", "aspect", "aspect", relevoBounds, 8, 17);
 
+// Modelo 3D do Cesium ion, gerado no Agisoft Metashape. VITE_CESIUM_3D_TOKEN
+// é igual ao token do ion, por isso reaproveita VITE_CESIUM_ION_TOKEN.
+const modelo: ProjectLayerConfig = {
+  id: "modelo", name: "Modelo 3D", description: "", kind: "3d-tiles", defaultVisible: false,
+  source: {
+    format: "3d-tiles", source: "ion", assetId: 6130668, tokenEnv: "VITE_CESIUM_ION_TOKEN",
+    // Provisório: a conferir com modelAlignment. Registre aqui a referência de
+    // altura usada no upload do ion (elipsoidal, ortométrica, ajuste no ion).
+    heightOffsetMeters: 0,
+  },
+};
+
 export const project: ProjectConfig = {
   ...templateProject,
   id: "campinas-2",
@@ -47,13 +59,12 @@ export const project: ProjectConfig = {
   // Sem bounds do projeto: limite de navegação desligado. Os bounds das camadas
   // são tiles inteiros, não o contorno dos dados. Para ligar o limite, use
   // "Capturar bounds da vista" (cameraCapture) e cole bounds: [W, S, E, N].
-  // Provisória: vista de cima sobre o centro do orto. Capture a Home final com cameraCapture.
-  // Ângulos em graus; altura em metros sobre o elipsoide.
-  initialCamera: { longitude: -47.197, latitude: -23.0, height: 5000, heading: 0, pitch: -90, roll: 0 },
+  // Abertura e Home, capturada com cameraCapture. Ângulos em graus; altura em metros sobre o elipsoide.
+  initialCamera: { longitude: -47.1247007, latitude: -22.9890922, height: 1051.7, heading: 336.55, pitch: -43.34, roll: 0 },
   // Ordem = empilhamento: o último item fica por cima.
-  layers: [basemap, orto, mds, mdt, declividade, aspecto],
+  layers: [basemap, orto, mds, mdt, declividade, aspecto, modelo],
   scenes: [],
   diagnostic: { steps: [] },
-  // Ferramentas só aparecem em npm run dev; desligue cameraCapture ao finalizar.
-  developmentTools: { modelAlignment: false, cropAuthoring: false, cameraCapture: true },
+  // Ferramentas só aparecem em npm run dev; desligue todas ao finalizar.
+  developmentTools: { modelAlignment: true, cropAuthoring: true, cameraCapture: true },
 };
