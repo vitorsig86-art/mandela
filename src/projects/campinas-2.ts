@@ -65,6 +65,62 @@ const modelo: ProjectLayerConfig = {
   },
 };
 
+// Vetores: GeoJSON em CRS84, sem Z, com id único (sem uniqueFeatureIds).
+// Ordem no painel (panelOrder): Microbacias, Curvas, Drenagem MDT, Drenagem MDS.
+const geojson = (file: string) => `${R2}/geojson/${file}`;
+
+// Paleta das microbacias, indexada pelo atributo "cor" (0 a 9).
+const microbaciaCores = ["#E6194B", "#3CB44B", "#FFE119", "#4363D8", "#F58231", "#911EB4", "#42D4F4", "#F032E6", "#BFEF45", "#FABED4"];
+
+// O stroke da classe só é usado se "cor" vier como texto ("3"): o outline lê o índice numérico.
+const microbacias: ProjectLayerConfig = {
+  id: "microbacias", name: "Microbacias", description: "", kind: "vector", defaultVisible: false, panelOrder: 1, opacityControl: true,
+  source: {
+    format: "geojson", url: geojson("microbacias.geojson"), autoZoom: false,
+    style: {
+      stroke: "#FFFFFF", strokeWidth: 1.5, fillOpacity: 0.35, clampToGround: true, zIndex: 3,
+      classification: { property: "cor", classes: Object.fromEntries(microbaciaCores.map((color, index) => [String(index), { fill: color, stroke: color }])) },
+      outline: { property: "cor", colors: microbaciaCores, width: 1.5 },
+    },
+    popup: { titleProperty: "nome", fields: [
+      { property: "area_ha", label: "Área", decimals: 2, suffix: " ha" },
+      { property: "perimetro_km", label: "Perímetro", decimals: 2, suffix: " km" },
+    ] },
+  },
+};
+
+const curvas: ProjectLayerConfig = {
+  id: "curvas1", name: "Curvas de Nível (1 m)", description: "", kind: "contours", defaultVisible: false, panelOrder: 2,
+  source: {
+    format: "geojson", url: geojson("curvas_1m.geojson"), autoZoom: false,
+    style: { stroke: "#000000", strokeWidth: 1, clampToGround: true, zIndex: 5 },
+    popup: { title: "Curva de nível", fields: [{ property: "cota_m", label: "Cota", suffix: " m", format: "integer" }] },
+  },
+};
+
+// Drenagem por ordem de Strahler, uma por vez (mesmo exclusiveGroup).
+const drenagem = (id: string, name: string, file: string, panelOrder: number): ProjectLayerConfig => ({
+  id, name, description: "", kind: "drainage", defaultVisible: false, exclusiveGroup: "drenagem", panelOrder,
+  source: {
+    format: "geojson", url: geojson(file), autoZoom: false,
+    style: {
+      stroke: "#00E5FF", strokeWidth: 1, clampToGround: true, zIndex: 10,
+      classification: { property: "STRAHLER", classes: {
+        1: { stroke: "#00E5FF", strokeWidth: 1, zIndex: 10 },
+        2: { stroke: "#14B8F0", strokeWidth: 1.6, zIndex: 11 },
+        3: { stroke: "#1E88E5", strokeWidth: 2.4, zIndex: 12 },
+        4: { stroke: "#1546D8", strokeWidth: 3.4, zIndex: 13 },
+      } },
+    },
+    popup: { title: "Drenagem", fields: [
+      { property: "STRAHLER", label: "Ordem de Strahler", format: "integer" },
+      { property: "area_contribuicao_ha", label: "Área de contribuição", decimals: 2, suffix: " ha" },
+    ] },
+  },
+});
+const drenagemMdt = drenagem("drenagem-mdt", "Drenagem (MDT)", "drenagem_mdt.geojson", 3);
+const drenagemMds = drenagem("drenagem-mds", "Drenagem (MDS)", "drenagem_mds.geojson", 4);
+
 export const project: ProjectConfig = {
   ...templateProject,
   id: "campinas-2",
@@ -76,7 +132,7 @@ export const project: ProjectConfig = {
   // Abertura e Home, capturada com cameraCapture. Ângulos em graus; altura em metros sobre o elipsoide.
   initialCamera: { longitude: -47.1247007, latitude: -22.9890922, height: 1051.7, heading: 336.55, pitch: -43.34, roll: 0 },
   // Ordem = empilhamento: o último item fica por cima.
-  layers: [basemap, orto, mds, mdt, declividade, aspecto, modelo],
+  layers: [basemap, orto, mds, mdt, declividade, aspecto, microbacias, curvas, drenagemMdt, drenagemMds, modelo],
   scenes: [],
   diagnostic: { steps: [] },
   // Ferramentas de desenvolvimento desligadas: o dev fica igual ao site publicado.
