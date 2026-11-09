@@ -99,7 +99,10 @@ const curvas: ProjectLayerConfig = {
 };
 
 // Drenagem por ordem de Strahler, uma por vez (mesmo exclusiveGroup).
-const drenagem = (id: string, name: string, file: string, panelOrder: number): ProjectLayerConfig => ({
+type StrahlerClasses = Record<string, { stroke: string; strokeWidth: number; zIndex: number }>;
+const drenagem = (
+  id: string, name: string, file: string, panelOrder: number, extraClasses: StrahlerClasses = {},
+): ProjectLayerConfig => ({
   id, name, description: "", kind: "drainage", defaultVisible: false, exclusiveGroup: "drenagem", panelOrder,
   source: {
     format: "geojson", url: geojson(file), autoZoom: false,
@@ -110,6 +113,7 @@ const drenagem = (id: string, name: string, file: string, panelOrder: number): P
         2: { stroke: "#14B8F0", strokeWidth: 1.6, zIndex: 11 },
         3: { stroke: "#1E88E5", strokeWidth: 2.4, zIndex: 12 },
         4: { stroke: "#1546D8", strokeWidth: 3.4, zIndex: 13 },
+        ...extraClasses,
       } },
     },
     popup: { title: "Drenagem", fields: [
@@ -119,7 +123,11 @@ const drenagem = (id: string, name: string, file: string, panelOrder: number): P
   },
 });
 const drenagemMdt = drenagem("drenagem-mdt", "Drenagem (MDT)", "drenagem_mdt.geojson", 3);
-const drenagemMds = drenagem("drenagem-mds", "Drenagem (MDS)", "drenagem_mds.geojson", 4);
+// A rede do MDS vai até a ordem 6 de Strahler.
+const drenagemMds = drenagem("drenagem-mds", "Drenagem (MDS)", "drenagem_mds.geojson", 4, {
+  5: { stroke: "#0B2A9E", strokeWidth: 4.4, zIndex: 13 },
+  6: { stroke: "#061A6B", strokeWidth: 5.4, zIndex: 13 },
+});
 
 export const project: ProjectConfig = {
   ...templateProject,
